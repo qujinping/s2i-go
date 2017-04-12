@@ -25,8 +25,6 @@ test -z "$BASE_IMAGE_NAME" && {
   BASE_IMAGE_NAME="${BASE_DIR_NAME#sti-}"
 }
 
-NAMESPACE="mid/"
-
 function cleanup {
   rm -f ${DOCKERFILE_PATH}.version
 }
@@ -62,10 +60,7 @@ function squash {
   #        compatibility issues
   easy_install -q --user docker_py==1.7.2 docker-squash==1.0.4
   base=$(awk '/^FROM/{print $2}' $1)
-  old_imageid=$(docker inspect --format='{{.Id}}' ${IMAGE_NAME})
-  ${HOME}/.local/bin/docker-squash -f $base -t ${IMAGE_NAME} ${IMAGE_NAME}
-  echo "-> Removing obsoleted image ..."
-  docker rmi $old_imageid
+  ${HOME}/.local/bin/docker-squash -f $base ${IMAGE_NAME}
 }
 
 # Versions are stored in subdirectories. You can specify VERSION variable
